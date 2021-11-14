@@ -20,11 +20,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '$ri9a@hy)3=vp&_umvj&-bkij#d+h63*bw4t24qd+$-@o75@e_'
+# различные пароли секреты и прочие чувствительные переменные нужно задавать через переменные среды окружения
+# их быть в коде не должно! тк код хранится в системе контроля версий и мы считаем это недоверенным хранилищем
+# учти, что теперь проект не запуститься через "./manage.py runserver" нужно запускать так
+# "SECRET_KEY=qwerty1234 ./manage.py runserver" те с указанием переменной среды окружения
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# TODO эту переменную также часто выносят в env но пока WIP не нужно этого делать
 DEBUG = True
 
+# TODO второй домен странный какой то, уверене что он здесь нужен?
 ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
 
 
