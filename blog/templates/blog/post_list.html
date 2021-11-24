@@ -5,8 +5,11 @@
                     <div class="date">
                         <p>Опубликовано: {{ post.published_date }}</p>
                     </div>
-                    <h1><a href="">{{ post.title }}</a></h1>
+                       <h1>
+                      <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                       </h1>
                     <p>{{ post.text|linebreaksbr }}</p>
                 </div>
             {% endfor %}
+            {% include "blog/pagination.html" with page=posts %}
 {% endblock %}
