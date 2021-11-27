@@ -41,7 +41,7 @@ def post_detail(request, pk):
     else:
         comment_form = CommentForm()
     return render(request,
-                  'blog/post/detail.html',
+                  'blog/post_detail.html',
                  {'post': post,
                   'comments': comments,
                   'comment_form': comment_form})
