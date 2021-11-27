@@ -1,0 +1,42 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <div class="post">
+        {% if post.published_date %}
+            <div class="date">
+                {{ post.published_date }}
+            </div>
+        {% endif %}
+        {% if user.is_authenticated %}
+             <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+        {% endif %}
+        <h1>{{ post.title }}</h1>
+        <p>{{ post.text|linebreaksbr }}</p>
+        {% with comments.count as total_comments %}
+    <h2>
+        {{ total_comments }} comment{{ total_comments|pluralize }}
+    </h2>
+{% endwith %}
+{% for comment in comments %}
+    <div class="comment">
+        <p class="info">
+            Comment {{ forloop.counter }} by {{ comment.name }}
+            {{ comment.created }}
+        </p>
+        {{ comment.body|linebreaks }}
+    </div>
+{% empty %}
+    <p>There are no comments yet.</p>
+{% endfor %}
+{% if new_comment %}
+    <h2>Your comment has been added.</h2>
+{% else %}
+    <h2>Add a new comment</h2>
+    <form action="." method="post">
+        {{ comment_form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Add comment"></p>
+    </form>
+{% endif %}
+    </div>
+{% endblock %}
