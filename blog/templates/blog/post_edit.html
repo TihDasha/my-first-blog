@@ -1,6 +1,7 @@
-{% extends 'blog/base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
+    {# TODO при редактировании поста написано так же New post надо это исправить #}
     <h1>New post</h1>
     <form method="POST" class="post-form">{% csrf_token %}
         {{ form.as_p }}
