@@ -9,14 +9,23 @@
         <style>
           body {
             background: #F7E9B8;
-            color: #fff;
+            color: #000000;
           }
           </style>
     </head>
     <body>
       <div class="page-header">
         {% if user.is_authenticated %}
-             <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+            <a href="/accounts/logout/" class="top-menu"><span>Sign out</span></a>
+            <a href="" class="top-menu"><span>{{ user.username }}</span></a>
+{#            TODO добавить проверку что у пользователя есть права создавать посты #}
+{#            TODO {{ user.has_perm }} #}
+{#            TODO {{ if user_have_create_perms }} #}
+
+            <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span> New post</a>
+        {% else %}
+            <a href="/accounts/login/" class="top-menu"><span>Sign in</span></a>
+            <a href="/accounts/registration/" class="top-menu"><span>Sign up</span></a>
         {% endif %}
           <h1><a href="/">Art Galerka</a></h1>
       </div>

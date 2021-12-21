@@ -1,13 +1,10 @@
-from django.shortcuts import render
-from django.utils import timezone
-from .models import Post, Comment
-from django.shortcuts import render, get_object_or_404
-from .forms import PostForm
-from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import ListView
-from .forms import EmailPostForm
-from .forms import CommentForm
+from django.shortcuts import render, get_object_or_404, redirect
+from django.utils import timezone
+
+from .forms import PostForm, CommentForm
+from .models import Post
 
 
 def post_list(request):
@@ -22,7 +19,8 @@ def post_list(request):
     except EmptyPage:
         # If page is out of range deliver last page of results
         posts = paginator.page(paginator.num_pages)
-    return render(request, 'blog/post_list.html', {'page': page,'posts': posts})
+    return render(request, 'blog/post_list.html', {'page': page, 'posts': posts})
+
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -40,12 +38,20 @@ def post_detail(request, pk):
             new_comment.save()
     else:
         comment_form = CommentForm()
-    return render(request,
-                  'blog/post/detail.html',
-                 {'post': post,
-                  'comments': comments,
-                  'comment_form': comment_form})
+    return render(
+        request,
+        'blog/post_detail.html',
+        {
+            'post': post,
+            'comments': comments,
+            'comment_form': comment_form
+        }
+    )
 
+
+@login_required
+# https://docs.djangoproject.com/en/3.2/topics/auth/default/#default-permissions
+@permission_required('blog.add_post')
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
@@ -59,6 +65,9 @@ def post_new(request):
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
 
+
+@login_required
+@permission_required('blog.change_post')
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
@@ -72,3 +81,8 @@ def post_edit(request, pk):
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
+
+
+def post_delete():
+    # TODO
+    pass
